@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+data/*.db
+data/*.sqlite
+*.log
+
+Debug/
+Release/
+
+.vscode/
+.DS_Store
