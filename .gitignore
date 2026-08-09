@@ -12,3 +12,5 @@ Release/
 
 .vscode/
 .DS_Store
+
+*.launch
