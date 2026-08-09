@@ -21,6 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "meter.h"
 
 /* USER CODE END Includes */
 
@@ -44,6 +45,8 @@
 COM_InitTypeDef BspCOMInit;
 
 /* USER CODE BEGIN PV */
+
+static MeterReading currentReading;
 
 /* USER CODE END PV */
 
@@ -89,6 +92,7 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
+  currentReading=Meter_CreateDefault();
 
   /* USER CODE END 2 */
 

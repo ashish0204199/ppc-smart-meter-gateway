@@ -18,6 +18,6 @@ typedef struct
     uint32_t energy_mWh;
 } MeterReading;
 
-
+MeterReading Meter_CreateDefault(void);
 
 #endif /* INC_METER_H_ */
