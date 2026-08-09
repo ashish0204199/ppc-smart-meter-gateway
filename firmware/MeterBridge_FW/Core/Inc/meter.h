@@ -19,5 +19,6 @@ typedef struct
 } MeterReading;
 
 MeterReading Meter_CreateDefault(void);
+void Meter_UpdateEnergy(MeterReading *reading,uint32_t elapsedMs);
 
 #endif /* INC_METER_H_ */

@@ -14,3 +14,5 @@ Release/
 .DS_Store
 
 *.launch
+
+com.st.stm32cube.ide.mcu.sfrview.prefs

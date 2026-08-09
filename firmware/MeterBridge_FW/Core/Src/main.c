@@ -121,6 +121,8 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	  Meter_UpdateEnergy(&currentReading,HAL_GetTick());
+	  HAL_Delay(1000);
   }
   /* USER CODE END 3 */
 }

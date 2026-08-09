@@ -17,3 +17,9 @@ MeterReading Meter_CreateDefault(void)
 
 	return reading;
 }
+
+void Meter_UpdateEnergy (MeterReading *reading,uint32_t elapsedMs)
+{
+	uint64_t temp=((uint64_t)reading->power_mW * elapsedMs)/3600000;
+	reading->energy_mWh= temp;
+}
