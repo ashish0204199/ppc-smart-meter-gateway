@@ -21,6 +21,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <stdio.h>
+
 #include "meter.h"
 
 /* USER CODE END Includes */
@@ -47,6 +49,7 @@ COM_InitTypeDef BspCOMInit;
 /* USER CODE BEGIN PV */
 
 static MeterReading currentReading;
+static uint32_t lastUpdateMs;
 
 /* USER CODE END PV */
 
@@ -93,6 +96,7 @@ int main(void)
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
   currentReading=Meter_CreateDefault();
+  lastUpdateMs=HAL_GetTick();
 
   /* USER CODE END 2 */
 
@@ -115,13 +119,21 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  printf("Meter Bridge has started working\r\n");
   while (1)
   {
 
     /* USER CODE END WHILE */
 
+
     /* USER CODE BEGIN 3 */
-	  Meter_UpdateEnergy(&currentReading,HAL_GetTick());
+	  uint32_t nowMs=HAL_GetTick();
+	  uint32_t elapsedMs = nowMs -lastUpdateMs;
+	  Meter_UpdateEnergy(&currentReading,elapsedMs);
+
+	  lastUpdateMs=nowMs;
+	  printf("V=%lu mV, I=%lu mA, P= %lu mW,E= %lu mWh\r\n", (unsigned long)currentReading.voltage_mV ,(unsigned long) currentReading.current_mA,
+			  (unsigned long)currentReading.power_mW,(unsigned long)currentReading.energy_mWh);
 	  HAL_Delay(1000);
   }
   /* USER CODE END 3 */
