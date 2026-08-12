@@ -24,6 +24,7 @@
 #include <stdio.h>
 
 #include "meter.h"
+#include "telemetry.h"
 
 /* USER CODE END Includes */
 
@@ -132,8 +133,10 @@ int main(void)
 	  Meter_UpdateEnergy(&currentReading,elapsedMs);
 
 	  lastUpdateMs=nowMs;
-	  printf("V=%lu mV, I=%lu mA, P= %lu mW,E= %lu mWh\r\n", (unsigned long)currentReading.voltage_mV ,(unsigned long) currentReading.current_mA,
-			  (unsigned long)currentReading.power_mW,(unsigned long)currentReading.energy_mWh);
+	  //printf("V=%lu mV, I=%lu mA, P= %lu mW,E= %lu mWh\r\n", (unsigned long)currentReading.voltage_mV ,(unsigned long) currentReading.current_mA,
+			  //(unsigned long)currentReading.power_mW,(unsigned long)currentReading.energy_mWh);
+	  Telemetry_sendReading(&currentReading, nowMs);
+
 	  HAL_Delay(1000);
   }
   /* USER CODE END 3 */

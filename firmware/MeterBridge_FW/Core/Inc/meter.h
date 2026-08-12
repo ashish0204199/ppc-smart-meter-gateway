@@ -16,6 +16,7 @@ typedef struct
     uint32_t current_mA;
     uint32_t power_mW;
     uint32_t energy_mWh;
+    uint32_t energyRemainder_mWms;
 } MeterReading;
 
 MeterReading Meter_CreateDefault(void);
