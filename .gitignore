@@ -16,3 +16,7 @@ Release/
 *.launch
 
 com.st.stm32cube.ide.mcu.sfrview.prefs
+
+gateway/cpp_gateway/build/
+gateway/cpp_gateway/build_broken/
+
