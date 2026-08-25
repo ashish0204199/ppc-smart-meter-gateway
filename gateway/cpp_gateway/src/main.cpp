@@ -1,68 +1,64 @@
-#include "telemetry_parse.h"
+#include "telemetry_parser.h"
 #include<iostream>
+#include<string>
+#include "serial_port.h"
+#include <unistd.h>
 
-int main()
+int main(int argc , char* argv[])
 {
-	const std::string packet{"MB1,18,18075,230000,1000,230000,1154*0C"};
-
-	TelemetryReading reading{};
-	std::string errorMessage;
-	std::cout<<"RAW STM32 packet:"<<packet<<'\n';
-
-	if(!parseTelemetryPacket(packet,reading,errorMessage))
+	std::string devicePath{"/dev/ttyACM0"};
+	if(argc>1)
 	{
-		std::cerr<<"Packet rejected:"<<errorMessage<<'\n';
+		devicePath=argv[1];
+	}
+	std::string errorMessage;
+	const int serialFd=openSerialPort(devicePath,errorMessage);
+	if(serialFd<0)
+	{
+		std::cerr<<"Serial error="<<errorMessage<<'\n';
+		return 1;
+	}
+	if(!configureSerialPort(serialFd,errorMessage))
+	{
+		std::cerr<<"Failed to configure serial port: "<<errorMessage<<'\n';
+		::close(serialFd);
 		return 1;
 	}
 
-	std::cout<<"Packet accepted:\n";
-	std::cout<<"sequence="<<reading.sequence<<'\n';
-	std::cout<<"timestamp="<<reading.timestamp_ms<<'\n';
-	std::cout<<"voltage"<<reading.voltage_mV<<'\n';
-	std::cout<<"current="<<reading.current_mA<<'\n';
-	std::cout<<"power="<<reading.power_mW<<'\n';
-	std::cout<<"energy="<<reading.energy_mWh<<'\n';
-	return 0;
+	std::cout<<"Listening for STM32 telemetry on serial port"<<devicePath<<'\n';
+	while(true)
+	{
+		std::string packet;
+		if(!readSerialLine(serialFd,packet,errorMessage))
+		{
+			std::cerr<<"Failed to read serial Line"<<errorMessage<<'\n';
+			::close(serialFd);
+			return 1;
+		}
+
+		if(packet.empty())
+		{
+			continue;
+		}
+
+		if(packet.rfind("MB1",0)!=0)
+		{
+			std::cout<<"Device Message"<<packet<<'\n';
+			continue;
+		}
+
+		TelemetryReading reading{};
+		if(!parseTelemetryPacket(packet,reading,errorMessage))
+		{
+			std::cerr<<"packet rejected:"<<errorMessage<<'\n';
+			continue;
+		}
+
+		std::cout<<"Packet accepted \n"<<"Sequence="<<reading.sequence<<", Timestamp="<<reading.timestamp_ms<<"ms, Voltage="<<reading.voltage_mV<<"mV, Current="
+		<<reading.current_mA<<"mA, Power="<<reading.power_mW<<"mW, Energy="<<reading.energy_mWh<<"mWh\n";
+	}
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
