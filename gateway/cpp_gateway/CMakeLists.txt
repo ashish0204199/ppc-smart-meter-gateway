@@ -5,3 +5,10 @@ project(MeterBridgeGateway LANGUAGES  CXX)
 add_executable(meterbridge_gateway src/main.cpp src/telemetry_parser.cpp src/serial_port.cpp)
 target_include_directories(meterbridge_gateway PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_compile_features(meterbridge_gateway PRIVATE cxx_std_17)
+target_compile_options(
+    meterbridge_gateway
+    PRIVATE
+    -Wall
+    -Wextra
+    -Wpedantic
+)
